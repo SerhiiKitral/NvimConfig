@@ -3,12 +3,10 @@ return {
   opts = {
     keymap = {
       ["<C-d>"] = { "show_documentation", "hide_documentation" },
-      ["<C-Up>"] = { "select_prev", "fallback" },
-      ["<C-Down>"] = { "select_next", "fallback" },
+      ["<Up>"] = { "select_prev", "fallback" },
+      ["<Down>"] = { "select_next", "fallback" },
       ["<M-Up>"] = { "scroll_documentation_up", "fallback" },
       ["<M-Down>"] = { "scroll_documentation_down", "fallback" },
-      ["<Up>"] = {},
-      ["<Down>"] = {},
       ["<CR>"] = {},
       ["<Tab>"] = { "accept", "fallback" },
     },
