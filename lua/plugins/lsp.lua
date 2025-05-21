@@ -13,6 +13,13 @@ return {
           },
         },
       },
+      tinymist = {
+        settings = {
+          exportPdf = "never",
+          outputPath = "$root/target/$dir/$name",
+          formatterMode = "typstyle",
+        },
+      },
       clangd = {},
       omnisharp = {},
       jsonls = {},
