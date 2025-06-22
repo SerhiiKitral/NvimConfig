@@ -9,6 +9,7 @@ return {
               typeCheckingMode = "off",
               autoSearchPaths = true,
               diagnosticMode = "workspace",
+              extraPaths = { "./" },
             },
           },
         },
