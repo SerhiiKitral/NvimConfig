@@ -1,5 +1,6 @@
 return {
   "saghen/blink.cmp",
+  version = "1.*",
   opts = {
     keymap = {
       ["<C-d>"] = { "show_documentation", "hide_documentation" },
@@ -35,6 +36,9 @@ return {
     },
     signature = {
       enabled = true,
+      trigger = {
+        enabled = true,
+      },
       window = {
         min_width = 1,
         max_width = 120,
