@@ -1,30 +1,39 @@
 return {
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "lua",
-        "bash",
-        "json",
-        "markdown",
-        "typst",
-        "rust",
-        "c_sharp",
-        "python",
-      },
-      highlight = { enable = true },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true, -- Automatically jump forward to textobj, like targets.vim
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-          },
-        },
-      },
-    },
-  },
+	"nvim-treesitter/nvim-treesitter",
+	branch = "master",
+	build = ":TSUpdate",
+	config = function()
+		local configs = require("nvim-treesitter.configs")
+
+		configs.setup({
+			ensure_installed = {
+				"c",
+				"c_sharp",
+				"lua",
+				"vim",
+				"vimdoc",
+				"markdown",
+				"query",
+				"elixir",
+				"xml",
+				"heex",
+				"javascript",
+				"html",
+			},
+			auto_install = true,
+			sync_install = false,
+			highlight = { enable = true },
+			indent = { enable = true },
+
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<Enter>", -- set to `false` to disable one of the mappings
+					node_incremental = "<Enter>",
+					scope_incremental = false,
+					node_decremental = "<Backspace>",
+				},
+			},
+		})
+	end,
 }

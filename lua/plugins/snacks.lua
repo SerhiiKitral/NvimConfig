@@ -15,7 +15,17 @@ return {
 			animate = { enabled = false },
 		},
 		input = { enabled = false },
-		picker = { enabled = false },
+		picker = {
+			enabled = true,
+			win = {
+				input = {
+					keys = {
+						["<C-Up>"] = { "preview_scroll_up", mode = { "i", "n" } },
+						["<C-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
+					},
+				},
+			},
+		},
 		notifier = { enabled = true },
 		quickfile = { enabled = false },
 		scope = { enabled = false },
