@@ -14,27 +14,14 @@ return {
 		formatters_by_ft = {
 			lua = { "stylua" },
 			sh = { "shfmt" },
-			python = { "black" },
+			python = { "ruff_format" },
 			cs = { "csharpier" },
 			c = { "clang-format" },
 			cpp = { "clang-format" },
-			json = { "prettier" },
+			json = { "jq" },
+			xml = { "xmlformat" },
 		},
 		formatters = {
-			prettier = {
-				prepend_args = {
-					"--parser",
-					"json",
-					"--tab-width",
-					"2",
-					"--use-tabs",
-					"false",
-					"--print-width",
-					"80",
-					"--bracket-same-line",
-					"false",
-				},
-			},
 			csharpier = {
 				command = "csharpier",
 				args = { "format" },

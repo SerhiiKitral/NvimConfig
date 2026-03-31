@@ -16,6 +16,9 @@ return {
 		},
 		completion = {
 			ghost_text = { enabled = false },
+			trigger = {
+				show_on_insert_on_trigger_character = true,
+			},
 			documentation = {
 				auto_show = false,
 				window = {
@@ -41,6 +44,8 @@ return {
 			enabled = true,
 			trigger = {
 				enabled = true,
+				show_on_trigger_character = true,
+				show_on_insert_on_trigger_character = true,
 			},
 			window = {
 				min_width = 1,

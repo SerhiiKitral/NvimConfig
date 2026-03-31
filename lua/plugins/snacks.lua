@@ -31,6 +31,6 @@ return {
 		scope = { enabled = false },
 		scroll = { enabled = false },
 		statuscolumn = { enabled = false },
-		words = { enabled = false },
+		words = { enabled = true },
 	},
 }

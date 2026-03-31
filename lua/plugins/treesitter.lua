@@ -12,6 +12,7 @@ return {
 				"lua",
 				"vim",
 				"vimdoc",
+				"json",
 				"markdown",
 				"query",
 				"elixir",

@@ -136,13 +136,6 @@ map("n", "<leader>fr", function() Snacks.picker.recent() end, { desc = "Recent F
 map("n", "<leader>cw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "Workspace Symbols" })
 map("n", "<leader>cs", function() Snacks.picker.lsp_symbols() end, { desc = "Document Symbols" })  -- replaces your trouble one if you prefer
 
-vim.keymap.set("n", "<leader>a", function()
-  require("aerial").snacks_picker({
-    manage_folds = false,
-    scope = "project",
-  })
-end)
-
 -- Git
 map("n", "<leader>gc", function() Snacks.picker.git_log() end, { desc = "Git Commits" })
 map("n", "<leader>gs", function() Snacks.picker.git_status() end, { desc = "Git Status" })

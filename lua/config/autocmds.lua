@@ -26,3 +26,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		end
 	end,
 })
+
+vim.api.nvim_create_autocmd("CompleteDone", {
+	callback = function()
+		if vim.bo.filetype == "cs" then
+			vim.schedule(function()
+				require("blink.cmp").show_signature()
+			end)
+		end
+	end,
+})

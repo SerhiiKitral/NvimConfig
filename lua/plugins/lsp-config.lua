@@ -3,18 +3,33 @@ return {
 	dependencies = { "saghen/blink.cmp" },
 	opts = {
 		servers = {
-			pyright = {
+			basedpyright = {
 				settings = {
-					python = {
+					basedpyright = {
 						analysis = {
 							typeCheckingMode = "basic",
 							autoSearchPaths = true,
-							diagnosticMode = "workspace",
+							diagnosticMode = "openFilesOnly",
+							useLibraryCodeForTypes = true,
 							extraPaths = { "./" },
 						},
 					},
 				},
 			},
+			lua_ls = {
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("", true),
+							checkThirdParty = false,
+						},
+					},
+				},
+			},
+			ruff = {},
 			tinymist = {
 				settings = {
 					exportPdf = "never",
