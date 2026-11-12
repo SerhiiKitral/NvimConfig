@@ -36,3 +36,11 @@ vim.api.nvim_create_autocmd("CompleteDone", {
 		end
 	end,
 })
+
+vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
+	callback = function()
+		vim.schedule(function()
+			require("lualine").refresh({ place = { "statusline" } })
+		end)
+	end,
+})
