@@ -1,42 +1,56 @@
 local map = vim.keymap.set
 
+vim.keymap.set({ "x", "o" }, "af", function()
+	require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
+end)
+vim.keymap.set({ "x", "o" }, "if", function()
+	require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
+end)
+vim.keymap.set({ "x", "o" }, "ac", function()
+	require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
+end)
+vim.keymap.set({ "x", "o" }, "ic", function()
+	require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
+end)
+-- You can also use captures from other query groups like `locals.scm`
+vim.keymap.set({ "x", "o" }, "as", function()
+	require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals")
+end)
+
 map({ "n", "t" }, "<F8>", "<cmd>:bd!<cr>")
 map("n", "<leader>nn", "<cmd>noh<cr>", { desc = "Clear Search Highlight" })
 map("i", "<C-H>", "<C-w>", { desc = "Ctrl+Backspace: delete word before cursor" })
 map("i", "<C-Del>", "<C-o>dw", { desc = "Ctrl+Del: delete word after cursor" })
 
 map({ "n", "v" }, "<leader>p", "P", { desc = "Paste without overwriting register" })
-map("v", "<leader>d", [["_d]], { desc = "Delete to black hole register" })
 
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
--- Move to window using the <ctrl> hjkl keys
-map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
-map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
-map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
-map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+-- Move to window using <ctrl> arrows
+map("n", "<C-Left>", "<C-w>h", { desc = "Go to Left Window" })
+map("n", "<C-Down>", "<C-w>j", { desc = "Go to Lower Window" })
+map("n", "<C-Up>", "<C-w>k", { desc = "Go to Upper Window" })
+map("n", "<C-Right>", "<C-w>l", { desc = "Go to Right Window" })
 
--- Resize window using <ctrl> arrow keys
-map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
-map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
-map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
-map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+-- Resize window using <ctrl-shift> arrows
+map("n", "<C-S-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+map("n", "<C-S-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+map("n", "<C-S-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+map("n", "<C-S-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- buffers
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "<S-Left>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "<S-Right>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "<leader>bd", "<cmd>:bd!<cr>", { desc = "Delete Buffer and Window" })
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
-map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
-map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
+map({ "x", "o" }, "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
 map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
-map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
-map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
+map({ "x", "o" }, "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 
 -- Add undo break-points
 map("i", ",", ",<c-g>u")
@@ -48,10 +62,6 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 --keywordprg
 map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
-
--- better indenting
-map("v", "<", "<gv")
-map("v", ">", ">gv")
 
 -- location list
 map("n", "<leader>xl", function()
@@ -114,14 +124,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
 
 		-- Formatting
-		map("n", "<leader>f", function()
+		map("n", "<leader>cf", function()
 			vim.lsp.buf.format({ async = true })
 		end, "Format file")
 
 		-- Diagnostics
-		map("n", "<leader>d", vim.diagnostic.open_float, "Show diagnostic")
-		map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-		map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+		map("n", "<leader>cd", vim.diagnostic.open_float, "Show diagnostic")
 	end,
 })
 
@@ -134,25 +142,8 @@ map("n", "<leader>fr", function() Snacks.picker.recent() end, { desc = "Recent F
 
 -- LSP
 map("n", "<leader>cw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "Workspace Symbols" })
-map("n", "<leader>cs", function() Snacks.picker.lsp_symbols() end, { desc = "Document Symbols" })  -- replaces your trouble one if you prefer
+-- map("n", "<leader>cs", function() Snacks.picker.lsp_symbols() end, { desc = "Document Symbols" })  -- replaces your trouble one if you prefer
 
 -- Git
 map("n", "<leader>gc", function() Snacks.picker.git_log() end, { desc = "Git Commits" })
 map("n", "<leader>gs", function() Snacks.picker.git_status() end, { desc = "Git Status" })
-
-vim.keymap.set({ "x", "o" }, "af", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
-end)
-vim.keymap.set({ "x", "o" }, "if", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects")
-end)
-vim.keymap.set({ "x", "o" }, "ac", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects")
-end)
-vim.keymap.set({ "x", "o" }, "ic", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects")
-end)
--- You can also use captures from other query groups like `locals.scm`
-vim.keymap.set({ "x", "o" }, "as", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@local.scope", "locals")
-end)

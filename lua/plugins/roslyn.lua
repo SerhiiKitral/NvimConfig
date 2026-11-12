@@ -6,7 +6,7 @@ return {
 	opts = {
 		-- "auto" | "roslyn" | "off"
 		-- Use "roslyn" if you notice Neovim's filewatcher causing performance issues
-		filewatching = "auto",
+		filewatching = "roslyn",
 
 		-- Set to true if your solution lives in a parent directory of your working dir
 		-- (useful for monorepos or when opening a subfolder)
