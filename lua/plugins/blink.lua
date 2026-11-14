@@ -3,7 +3,10 @@ return {
 	version = "1.*",
 	opts = {
 		sources = {
-			default = { "lsp", "path", "buffer", "snippets" },
+			default = { "lazydev", "lsp", "path", "buffer", "snippets" },
+			providers = {
+				lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+			},
 		},
 		keymap = {
 			["<C-d>"] = { "show_documentation", "hide_documentation" },
@@ -12,7 +15,7 @@ return {
 			["<M-Up>"] = { "scroll_documentation_up", "fallback" },
 			["<M-Down>"] = { "scroll_documentation_down", "fallback" },
 			["<CR>"] = {},
-			["<Tab>"] = { "accept", "fallback" },
+			["<Tab>"] = { "accept", "snippet_forward", "fallback" },
 		},
 		completion = {
 			ghost_text = { enabled = false },
@@ -46,6 +49,9 @@ return {
 				enabled = true,
 				show_on_trigger_character = true,
 				show_on_insert_on_trigger_character = true,
+				show_on_accept = true,
+				show_on_insert = true, -- whenever you enter insert mode inside a call
+				show_on_keyword = true,
 			},
 			window = {
 				min_width = 1,

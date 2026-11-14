@@ -1,6 +1,7 @@
 return {
 	"stevearc/conform.nvim",
 	opts = {
+		format_on_save = { timeout_ms = 3000, lsp_format = "fallback" },
 		formatters_by_ft = {
 			lua = { "stylua" },
 			sh = { "shfmt" },
@@ -10,12 +11,6 @@ return {
 			cpp = { "clang-format" },
 			json = { "jq" },
 			xml = { "xmlformat" },
-		},
-		formatters = {
-			csharpier = {
-				command = "csharpier",
-				args = { "format" },
-			},
 		},
 	},
 }

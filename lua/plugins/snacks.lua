@@ -4,9 +4,6 @@ return {
 	lazy = false,
 	---@type snacks.Config
 	opts = {
-		-- your configuration comes here
-		-- or leave it empty to use the default settings
-		-- refer to the configuration section below
 		bigfile = { enabled = false },
 		dashboard = { enabled = false },
 		explorer = { enabled = false },
@@ -33,4 +30,11 @@ return {
 		statuscolumn = { enabled = false },
 		words = { enabled = true },
 	},
+	config = function(_, opts)
+		require("snacks").setup(opts)
+		Snacks.toggle.inlay_hints():map("<leader>uh")
+		Snacks.toggle.diagnostics():map("<leader>ud")
+		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+		Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>ul")
+	end,
 }

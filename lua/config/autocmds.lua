@@ -4,35 +4,20 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.shiftwidth = 4
 		vim.opt_local.tabstop = 4
 		vim.opt_local.softtabstop = 4
-		vim.b.snacks_indent_size = 4
+		-- vim.b.snacks_indent_size = 4
 	end,
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = "*",
-	callback = function()
-		-- Step 1: Remove \r, preserving cursor position
-		local pos = vim.api.nvim_win_get_cursor(0)
-		if vim.fn.search("\r", "nw") > 0 then
-			vim.cmd([[%s/\r//g]])
+	callback = function(args)
+		local buf = args.buf
+		if not vim.bo[buf].modifiable then
+			return
 		end
-		vim.api.nvim_win_set_cursor(0, pos)
-
-		-- Step 2: Run conform.nvim formatter (async)
-		-- Note: Make sure conform.nvim is loaded and available
-		local ok, conform = pcall(require, "conform")
-		if ok then
-			conform.format({ async = false }) -- or async = true if you prefer
-		end
-	end,
-})
-
-vim.api.nvim_create_autocmd("CompleteDone", {
-	callback = function()
-		if vim.bo.filetype == "cs" then
-			vim.schedule(function()
-				require("blink.cmp").show_signature()
-			end)
+		for i, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
+			if line:find("\r", 1, true) then
+				vim.api.nvim_buf_set_lines(buf, i - 1, i, false, { (line:gsub("\r", "")) })
+			end
 		end
 	end,
 })
@@ -42,5 +27,17 @@ vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
 		vim.schedule(function()
 			require("lualine").refresh({ place = { "statusline" } })
 		end)
+	end,
+})
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.hl.on_yank({ timeout = 200 })
+	end,
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+	callback = function(args)
+		vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { buffer = args.buf, desc = "Exit terminal mode" })
 	end,
 })

@@ -251,7 +251,7 @@ return {
 				DapBreakpoint = { text = "\u{f0765}", texthl = "DapBreakpoint" }, -- md-circle
 				DapBreakpointCondition = { text = "\u{f0b94}", texthl = "DapBreakpointCondition" }, -- md-eye_circle
 				DapLogPoint = { text = "\u{f06ff}", texthl = "DapLogPoint" }, -- md-pencil_circle
-				DapStopped = { text = "", texthl = "DapStopped", linehl = "DapStoppedLine" }, -- empty in what you sent
+				DapStopped = { text = "▶", texthl = "DapStopped", linehl = "DapStoppedLine" },
 				DapBreakpointRejected = { text = "\u{f0159}", texthl = "DapBreakpointRejected" }, -- md-close_circle
 			}
 			for name, sign in pairs(signs) do
@@ -279,7 +279,21 @@ return {
 					name = "Launch (C#)",
 					request = "launch",
 					program = function()
-						return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/", "file")
+						local dap = require("dap")
+						local dlls = vim.fs.find(function(name, path)
+							return name:match("%.dll$") ~= nil and path:match("/bin/Debug/") ~= nil
+						end, { path = vim.fn.getcwd(), type = "file", limit = math.huge })
+
+						if #dlls == 0 then
+							vim.notify("No dll found in bin/Debug, run `dotnet build` first", vim.log.levels.WARN)
+							return dap.ABORT
+						end
+						table.sort(dlls)
+
+						-- Show each path starting from the folder that contains bin/
+						return require("dap.ui").pick_one(dlls, "Select dll: ", function(path)
+							return path:match("([^/]+/bin/Debug/.+)$") or path
+						end) or dap.ABORT
 					end,
 				},
 				{
@@ -293,13 +307,5 @@ return {
 			-- ── Python via debugpy ──────────────────────────────────────────
 			require("dap-python").setup(vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python")
 		end,
-	},
-	{
-		"jay-babu/mason-nvim-dap.nvim",
-		dependencies = { "mason-org/mason.nvim" },
-		opts = {
-			ensure_installed = { "python", "coreclr" },
-			automatic_installation = true,
-		},
 	},
 }

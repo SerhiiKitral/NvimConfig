@@ -17,12 +17,11 @@ vim.keymap.set({ "x", "o" }, "as", function()
 	require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals")
 end)
 
-map({ "n", "t" }, "<F8>", "<cmd>:bd!<cr>")
 map("n", "<leader>nn", "<cmd>noh<cr>", { desc = "Clear Search Highlight" })
 map("i", "<C-H>", "<C-w>", { desc = "Ctrl+Backspace: delete word before cursor" })
 map("i", "<C-Del>", "<C-o>dw", { desc = "Ctrl+Del: delete word after cursor" })
 
-map({ "n", "v" }, "<leader>p", "P", { desc = "Paste without overwriting register" })
+map({ "x" }, "<leader>p", "P", { desc = "Paste without overwriting register" })
 
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -58,7 +57,7 @@ map("i", ".", ".<c-g>u")
 map("i", ";", ";<c-g>u")
 
 -- save file
-map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+map("n", "<leader>s", "<cmd>w<cr>", { desc = "Save File" })
 
 --keywordprg
 map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
@@ -98,6 +97,8 @@ map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<C-M-Left>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<C-M-Right>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 
 --
 map("n", "<leader>nh", "<cmd>messages<cr>", { desc = "Messages History" })
@@ -105,7 +106,11 @@ map("n", "<leader>nh", "<cmd>messages<cr>", { desc = "Messages History" })
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local map = function(mode, lhs, rhs, desc)
-			vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, desc = desc })
+			vim.keymap.set(mode, lhs, rhs, {
+				buffer = args.buf,
+				desc = desc,
+				nowait = lhs == "gr",
+			})
 		end
 
 		-- Navigation
@@ -121,11 +126,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- Refactor
 		map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-		map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
+		map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
 
 		-- Formatting
 		map("n", "<leader>cf", function()
-			vim.lsp.buf.format({ async = true })
+			require("conform").format({ async = true, lsp_format = "fallback" })
 		end, "Format file")
 
 		-- Diagnostics
@@ -147,3 +152,9 @@ map("n", "<leader>cw", function() Snacks.picker.lsp_workspace_symbols() end, { d
 -- Git
 map("n", "<leader>gc", function() Snacks.picker.git_log() end, { desc = "Git Commits" })
 map("n", "<leader>gs", function() Snacks.picker.git_status() end, { desc = "Git Status" })
+
+-- Snacks
+map("n", "<leader>ns", function() Snacks.notifier.show_history() end, { desc = "Notification History" })
+
+map("n", "]]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
+map("n", "[[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })

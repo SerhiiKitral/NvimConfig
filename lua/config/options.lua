@@ -6,21 +6,23 @@ vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
-vim.lsp.handlers["textDocument/signatureHelp"] = function() end
 vim.opt.relativenumber = true
 vim.opt.number = true
 
 vim.opt.cursorline = true
-vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#f79a70", bg = "NONE", bold = false })
 
 vim.opt.clipboard = "unnamedplus"
-vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site")
 
+vim.opt.foldtext = ""
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldenable = true
+
+vim.opt.undofile = true
+vim.opt.ignorecase = true -- search ignores case...
+vim.opt.smartcase = true -- ...unless you type a capital letter
 
 vim.diagnostic.config({
 	virtual_text = false,
