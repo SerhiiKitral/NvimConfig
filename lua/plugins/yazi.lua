@@ -29,6 +29,7 @@ return {
 		open_for_directories = true,
 		keymaps = {
 			show_help = "<f1>",
+			open_file_in_vertical_split = false, -- disable Ctrl+v
 		},
 	},
 	-- 👇 if you use `open_for_directories=true`, this is recommended

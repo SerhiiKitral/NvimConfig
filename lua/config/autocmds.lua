@@ -38,6 +38,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 vim.api.nvim_create_autocmd("TermOpen", {
 	callback = function(args)
+		if vim.bo[args.buf].filetype == "yazi" then
+			return -- yazi uses Escape itself
+		end
 		vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { buffer = args.buf, desc = "Exit terminal mode" })
 	end,
 })

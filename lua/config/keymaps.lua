@@ -158,3 +158,6 @@ map("n", "<leader>ns", function() Snacks.notifier.show_history() end, { desc = "
 
 map("n", "]]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
 map("n", "[[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
+
+map("n", "<leader>p", "<cmd>put<cr>", { desc = "Paste on new line below" })
+map("n", "<leader>P", "<cmd>put!<cr>", { desc = "Paste on new line above" })
