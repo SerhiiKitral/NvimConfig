@@ -4,7 +4,25 @@ return {
 	lazy = false,
 	---@type snacks.Config
 	opts = {
-		bigfile = { enabled = false },
+		bigfile = {
+			enabled = true,
+			notify = true,
+			size = 1.5 * 1024 * 1024, -- 1.5 MB
+			line_length = 1000, -- catches minified files
+			setup = function(ctx)
+				if vim.fn.exists(":NoMatchParen") ~= 0 then
+					vim.cmd("NoMatchParen")
+				end
+				Snacks.util.wo(0, { foldmethod = "manual", conceallevel = 0 })
+				vim.b.snacks_indent = false -- you have indent enabled; skip it here
+				vim.b.completion = false -- blink.cmp respects this
+				vim.schedule(function()
+					if vim.api.nvim_buf_is_valid(ctx.buf) then
+						vim.bo[ctx.buf].syntax = ctx.ft -- cheap regex highlighting
+					end
+				end)
+			end,
+		},
 		dashboard = { enabled = false },
 		explorer = { enabled = false },
 		indent = {
